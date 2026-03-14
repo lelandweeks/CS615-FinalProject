@@ -9,7 +9,8 @@ def LoadMetadata():
     df_list = [pd.read_csv(filename) for filename in all_files]
     return df_list
 
-def LoadImages(color=True, batch_size=32, shuffle=True, num_workers=2):
+def LoadImages(color=True, batch_size=32, shuffle=True):
+
 
     # choose color or grayscale 
     if color:
@@ -19,10 +20,10 @@ def LoadImages(color=True, batch_size=32, shuffle=True, num_workers=2):
 
     data_folder = 'images'
     
-    train_dataset = datasets.ImageFolder(os.path.join(f'{data_folder}', 'train'), transform=transforms)
-    test_dataset = datasets.ImageFolder(os.path.join(f'{data_folder}', 'test'), transform=transforms)
+    train_dataset = datasets.ImageFolder(os.path.join(f'{data_folder}', 'train'), transform=transform)
+    test_dataset = datasets.ImageFolder(os.path.join(f'{data_folder}', 'test'), transform=transform)
     
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle)
     
     return train_loader, train_dataset, test_loader, test_dataset
