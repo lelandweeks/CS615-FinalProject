@@ -22,7 +22,7 @@ BASE MODEL: Color images with 1 3x3 kernel and 1 convolutional layer
 2D MODEL: Same as base with grayscale images
     PARAMETERS: in_channels=1, num_kernels=1, kernel_size=3, num_conv_layers=1
     FILE NAME: model_gray_1k_3x3_1l.pt
-    COMMAND LINE: python main.py --mode train --color False
+    COMMAND LINE: python main.py --mode train --grayscale
  
 MULTIPLE KERNELS MODEL: Same as base with multiple kernels
     PARAMETERS: in_channels=3, num_kernels=3, kernel_size=3, num_conv_layers=1
@@ -44,13 +44,13 @@ def main():
 
     # parse the command line arguments to target the corresponding model
     args = parse_args()
-    print(f"Mode: {args.mode}, Color: {args.color}, Kernels: {args.kernels}, Layers: {args.layers}, Kernel Size: {args.kernel_size}")
+    print(f"Mode: {args.mode}, Color: {not args.grayscale}, Kernels: {args.kernels}, Layers: {args.layers}, Kernel Size: {args.kernel_size}")
 
     color = True
     dims = 'color'
-    if args.color == False:
-        color
-        dims = 'gray'
+    if args.grayscale:
+        color = False
+        dims = 'grayscale'
     kernels = args.kernels
     kernel_size = args.kernel_size
     layers = args.layers
@@ -61,6 +61,8 @@ def main():
     plot_filename = "plot_" + base_filename + ".png"
     print("Model Filename: ", model_filename)
     print("Plot Filename: ", plot_filename)
+    print(color, dims)
+    exit(0)
 
     # prepare to load the images
     print("Setting up the data loaders...")
@@ -104,7 +106,7 @@ def main():
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--mode', choices=['train', 'evaluate'], required=True)
-    parser.add_argument('--color', action='store_true', default=True)
+    parser.add_argument('--grayscale', action='store_true', default=False)
     parser.add_argument('--kernels', type=int, default=1)
     parser.add_argument('--layers', type=int, default=1)
     parser.add_argument('--kernel_size', type=int, default=3)
