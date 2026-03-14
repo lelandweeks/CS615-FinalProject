@@ -9,6 +9,9 @@ def LoadMetadata():
     df_list = [pd.read_csv(filename) for filename in all_files]
     return df_list
 
+# The original version of this file provided by the dataset publisher can be found here: 
+# https://github.com/MinecraftDataset/MiDaS/blob/main/load_data.py
+
 def LoadImages(color=True, batch_size=32, shuffle=True):
 
 
