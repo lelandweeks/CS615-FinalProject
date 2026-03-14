@@ -17,7 +17,7 @@ import train
 BASE MODEL: Color images with 1 3x3 kernel and 1 convolutional layer
     PARAMETERS: in_channels=3, num_kernels=1, kernel_size=3, num_conv_layers=1
     FILE NAME: model_color_1k_3x3_1l.pt
-    COMMAND LINE: python main.py --mode train
+    COMMAND LINE: python main.py --mode [train | evaluate}
 
 2D MODEL: Same as base with grayscale images
     PARAMETERS: in_channels=1, num_kernels=1, kernel_size=3, num_conv_layers=1
@@ -44,25 +44,25 @@ def main():
 
     # parse the command line arguments to target the corresponding model
     args = parse_args()
-    print(f"Mode: {args.mode}, Color: {not args.grayscale}, Kernels: {args.kernels}, Layers: {args.layers}, Kernel Size: {args.kernel_size}")
-
-    color = True
+    
+    mode = args.mode
+    color = not args.grayscale
     dims = 'color'
-    if args.grayscale:
-        color = False
+    if not color:
         dims = 'grayscale'
     kernels = args.kernels
     kernel_size = args.kernel_size
     layers = args.layers
     epochs = args.epochs
     learning_rate = args.lr
+    print(f"Mode: {mode}, Color: {color}, Kernels: {kernels}, Kernel Size: {kernel_size}, Layers: {layers}")
+
     base_filename = f"{dims}_{kernels}k_{kernel_size}x{kernel_size}_{layers}l"
     model_filename = "model_" + base_filename + ".pt"
     plot_filename = "plot_" + base_filename + ".png"
     print("Model Filename: ", model_filename)
     print("Plot Filename: ", plot_filename)
-    print(color, dims)
-    exit(0)
+
 
     # prepare to load the images
     print("Setting up the data loaders...")
@@ -71,7 +71,7 @@ def main():
     print(f"Number of test samples: {len(test_dataset)}")
 
     # train mode
-    if args.mode == 'train':
+    if mode == 'train':
         print(f"Training with pareamters: Epochs: {epochs}, Learning Rate: {learning_rate}")
         minecraft_model = model.MinecraftCNN(in_channels=3 if color else 1,
                                       num_kernels=kernels,
@@ -89,7 +89,7 @@ def main():
         plt.savefig(f'plots/{plot_filename}')
 
     # evaluate mode
-    elif args.mode == 'evaluate':
+    elif mode == 'evaluate':
         minecraft_model = model.MinecraftCNN(in_channels=3 if color else 1,
                                       num_kernels=kernels,
                                       kernel_size=kernel_size,
@@ -100,6 +100,10 @@ def main():
         evaluate_model = evaluate.EvaluateModel(minecraft_model, test_loader)
         accuracy = evaluate_model.evaluate()
         print(f'Final Test Accuracy: {accuracy:.2%}')
+
+    else:
+        print("Invalid mode. Must choose 'train' or 'evaluate'.")
+
     return
 
 
