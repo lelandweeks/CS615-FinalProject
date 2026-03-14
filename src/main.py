@@ -17,27 +17,27 @@ import train
 BASE MODEL: Color images with 1 3x3 kernel and 1 convolutional layer
     PARAMETERS: in_channels=3, num_kernels=1, kernel_size=3, num_conv_layers=1
     FILE NAME: model_color_1k_3x3_1l.pt
-    COMMAND LINE: python main.py --mode [train | evaluate}
+    COMMAND LINE: python main.py --mode [train | evaluate]
 
 2D MODEL: Same as base with grayscale images
     PARAMETERS: in_channels=1, num_kernels=1, kernel_size=3, num_conv_layers=1
     FILE NAME: model_gray_1k_3x3_1l.pt
-    COMMAND LINE: python main.py --mode train --grayscale
+    COMMAND LINE: python main.py --mode [train | evaluate] --grayscale
  
 MULTIPLE KERNELS MODEL: Same as base with multiple kernels
     PARAMETERS: in_channels=3, num_kernels=3, kernel_size=3, num_conv_layers=1
     FILE NAME: model_color_3k_3x3_1l.pt
-    COMMAND LINE: python main.py --mode train --kernels 3
+    COMMAND LINE: python main.py --mode [train | evaluate] --kernels 3
  
 KERNEL SIZE MODEL: Same as base with 5x5 kernels
     PARAMETERS: in_channels=3, num_kernels=1, kernel_size=5, num_conv_layers=1
     FILE NAME: model_color_1k_5x5_1l.pt
-    COMMAND LINE: python main.py --mode train --kernel_size 5
+    COMMAND LINE: python main.py --mode [train | evaluate] --kernel_size 5
 
 MULTIPLE CONV LAYERS MODEL: Same as base with multiple convolutional layers
     PARAMETERS: in_channels=3, num_kernels=1, kernel_size=3, num_conv_layers=3
     FILE NAME: model_color_1k_3x3_3l.pt
-    COMMAND LINE: python main.py --mode train --layers 3
+    COMMAND LINE: python main.py --mode [train | evaluate] --layers 3
 """
 
 def main():
