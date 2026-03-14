@@ -54,6 +54,8 @@ def main():
     kernels = args.kernels
     kernel_size = args.kernel_size
     layers = args.layers
+    epochs = args.epochs
+    learning_rate = args.lr
     base_filename = f"{dims}_{kernels}k_{kernel_size}x{kernel_size}_{layers}l"
     model_filename = "model_" + base_filename + ".pt"
     plot_filename = "plot_" + base_filename + ".png"
@@ -68,12 +70,13 @@ def main():
 
     # train mode
     if args.mode == 'train':
+        print(f"Training with pareamters: Epochs: {epochs}, Learning Rate: {learning_rate}")
         minecraft_model = model.MinecraftCNN(in_channels=3 if color else 1,
                                       num_kernels=kernels,
                                       kernel_size=kernel_size,
                                       num_conv_layers=layers)
         train_model = train.TrainModel(minecraft_model, train_loader)
-        train_losses = train_model.train(num_epochs=3, learning_rate=0.01)
+        train_losses = train_model.train(num_epochs=epochs, learning_rate=learning_rate)
         torch.save({'model': minecraft_model.state_dict(), 'losses': train_losses}, f"models/{model_filename}")
 
         # save the plot
@@ -105,6 +108,8 @@ def parse_args():
     parser.add_argument('--kernels', type=int, default=1)
     parser.add_argument('--layers', type=int, default=1)
     parser.add_argument('--kernel_size', type=int, default=3)
+    parser.add_argument('--epochs', type=int, default=50)
+    parser.add_argument('--lr', type=float, default=0.001)
     return parser.parse_args()
 
 if __name__ == "__main__":
