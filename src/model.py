@@ -30,8 +30,9 @@ class MinecraftCNN(nn.Module):
             layers.append(nn.ReLU())
 
             # update dimensions for next conv layer if there are multiple conv layers
-            conv_width = (conv_width - kernel_size) / CONV_STRIDE + 1
-            conv_height = (conv_height - kernel_size) / CONV_STRIDE + 1
+            # need to use // instead of / to get an integer value for the dimensions
+            conv_width = (conv_width - kernel_size) // CONV_STRIDE + 1
+            conv_height = (conv_height - kernel_size) // CONV_STRIDE + 1
             current_channels = num_kernels
 
         # reduce dimensions to most important features, reducing computational cost
@@ -54,7 +55,6 @@ class MinecraftCNN(nn.Module):
         # input size = num_kernels * height * width
         # (for 1 conv layer) calculation: 1 * 159 * 89 = 14,191
         linear_input = int(current_channels * pool_width * pool_height)
-        print(f"pool_width: {pool_width}, pool_height: {pool_height}, linear_input: {linear_input}")
         layers.append(nn.Linear(linear_input, num_classes))
 
         # build the model
