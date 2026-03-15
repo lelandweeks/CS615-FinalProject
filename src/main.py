@@ -1,6 +1,7 @@
 import argparse
 import torch
 import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay
 
 import data
 import evaluate
@@ -59,9 +60,11 @@ def main():
 
     base_filename = f"{dims}_{kernels}k_{kernel_size}x{kernel_size}_{layers}l"
     model_filename = "model_" + base_filename + ".pt"
-    plot_filename = "plot_" + base_filename + ".png"
+    loss_filename = "plot_" + base_filename + ".png"
+    cm_filename = "cm_" + base_filename + ".png"
     print("Model Filename: ", model_filename)
-    print("Plot Filename: ", plot_filename)
+    print("Loss Plot Filename: ", loss_filename)
+    print("Confusion Matrix Filename: ", cm_filename)
 
 
     # prepare to load the images
@@ -86,7 +89,7 @@ def main():
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
         plt.title('Training Loss vs Epochs')
-        plt.savefig(f'plots/{plot_filename}')
+        plt.savefig(f'plots/{loss_filename}')
 
     # evaluate mode
     elif mode == 'evaluate':
@@ -98,7 +101,13 @@ def main():
         minecraft_model.load_state_dict(model_from_disk['model'])
         train_losses = model_from_disk['losses']
         evaluate_model = evaluate.EvaluateModel(minecraft_model, test_loader)
-        accuracy = evaluate_model.evaluate()
+        accuracy, cm = evaluate_model.evaluate()
+        plt.figure(figsize=(12, 12))
+        plt.imshow(cm, cmap='Blues')
+        plt.colorbar()
+        plt.xlabel('Predicted label')
+        plt.ylabel('True label')        
+        plt.savefig(f'plots/{cm_filename}')
         print(f'Final Test Accuracy: {accuracy:.2%}')
 
     else:
