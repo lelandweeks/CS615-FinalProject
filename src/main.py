@@ -105,7 +105,6 @@ def main():
         minecraft_model = minecraft_model.to(device) # use GPU if available
         model_from_disk = torch.load(f"models/{model_filename}", weights_only=False)
         minecraft_model.load_state_dict(model_from_disk['model'])
-        train_losses = model_from_disk['losses']
         evaluate_model = evaluate.EvaluateModel(minecraft_model, test_loader, device)
         accuracy, cm = evaluate_model.evaluate()
         plt.figure(figsize=(12, 12))

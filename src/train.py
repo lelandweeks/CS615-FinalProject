@@ -3,8 +3,6 @@ import time
 import torch
 import torch.nn as nn
 
-import model
-
 class TrainModel:
     def __init__(self, model, train_loader, device):
         self.model = model
