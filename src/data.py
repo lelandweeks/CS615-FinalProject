@@ -1,5 +1,4 @@
 import os
-import socket
 import pandas as pd
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
@@ -22,11 +21,7 @@ def LoadImages(color=True, batch_size=32, shuffle=True):
     else:
         transform = transforms.Compose([transforms.Grayscale(), transforms.ToTensor()])
 
-    hostname = socket.gethostname()
-    if 'tux' in hostname:
-        data_folder = '/home/lhw22/cs615/CS615-FinalProject/images'
-    else:
-        data_folder = 'images'
+    data_folder = 'images'
 
     train_dataset = datasets.ImageFolder(os.path.join(f'{data_folder}', 'train'), transform=transform)
     test_dataset = datasets.ImageFolder(os.path.join(f'{data_folder}', 'test'), transform=transform)
