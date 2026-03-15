@@ -6,9 +6,10 @@ import torch.nn as nn
 import model
 
 class TrainModel:
-    def __init__(self, model, train_loader):
+    def __init__(self, model, train_loader, device):
         self.model = model
         self.train_loader = train_loader
+        self.device = device
 
     def train(self, num_epochs=10, learning_rate=0.01):
 
@@ -26,6 +27,10 @@ class TrainModel:
             total_loss_per_epoch = 0
             
             for batch_idx, (data, labels) in enumerate(self.train_loader):
+                
+                # use GPU if available
+                data, labels = data.to(self.device), labels.to(self.device)
+
                 # forward pass
                 optimizer.zero_grad()
                 predictions = self.model(data)

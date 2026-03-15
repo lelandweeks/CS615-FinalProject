@@ -43,6 +43,10 @@ MULTIPLE CONV LAYERS MODEL: Same as base with multiple convolutional layers
 
 def main():
 
+    # use GPU if available
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(f"Using device: {device}")
+
     # parse the command line arguments to target the corresponding model
     args = parse_args()
     
@@ -80,7 +84,8 @@ def main():
                                       num_kernels=kernels,
                                       kernel_size=kernel_size,
                                       num_conv_layers=layers)
-        train_model = train.TrainModel(minecraft_model, train_loader)
+        minecraft_model = minecraft_model.to(device) # use GPU if available
+        train_model = train.TrainModel(minecraft_model, train_loader, device)
         train_losses = train_model.train(num_epochs=epochs, learning_rate=learning_rate)
         torch.save({'model': minecraft_model.state_dict(), 'losses': train_losses}, f"models/{model_filename}")
 
@@ -97,10 +102,11 @@ def main():
                                       num_kernels=kernels,
                                       kernel_size=kernel_size,
                                       num_conv_layers=layers)
+        minecraft_model = minecraft_model.to(device) # use GPU if available
         model_from_disk = torch.load(f"models/{model_filename}", weights_only=False)
         minecraft_model.load_state_dict(model_from_disk['model'])
         train_losses = model_from_disk['losses']
-        evaluate_model = evaluate.EvaluateModel(minecraft_model, test_loader)
+        evaluate_model = evaluate.EvaluateModel(minecraft_model, test_loader, device)
         accuracy, cm = evaluate_model.evaluate()
         plt.figure(figsize=(12, 12))
         plt.imshow(cm, cmap='Blues')

@@ -6,9 +6,10 @@ import model
 
 
 class EvaluateModel:
-    def __init__(self, model, test_loader):
+    def __init__(self, model, test_loader, device):
         self.model = model
         self.test_loader = test_loader
+        self.device = device
 
     def evaluate(self):
 
@@ -20,6 +21,10 @@ class EvaluateModel:
 
         with torch.no_grad():
             for batch_idx, (data, labels) in enumerate(self.test_loader):
+
+                # use GPU if available
+                data, labels = data.to(self.device), labels.to(self.device)
+
                 predictions = self.model(data)
                 predicted_classes = predictions.argmax(dim=1)
                 correct_preds += (predicted_classes == labels).sum().item()
