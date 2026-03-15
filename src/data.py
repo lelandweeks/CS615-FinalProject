@@ -27,9 +27,10 @@ def LoadImages(color=True, batch_size=32, shuffle=True):
     train_dataset = datasets.ImageFolder(os.path.join(f'{data_folder}', 'train'), transform=transform)
     test_dataset = datasets.ImageFolder(os.path.join(f'{data_folder}', 'test'), transform=transform)
     
-    # use num_workers=0 for MacOS to avoid RuntimeError
-    # use num_workers=2 for Google Colab to speed up data loading
-    num_workers = 0 if platform.system() == 'Darwin' else 2
+    # use num_workers=0 and batch_size=32 for MacOS to avoid RuntimeError
+    # use num_workers=4 and batch_size=128 for Google Colab to speed up data loading
+    num_workers = 0 if platform.system() == 'Darwin' else 4
+    batch_size = batch_size if platform.system() == 'Darwin' else 128
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers, pin_memory=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers, pin_memory=True)
     
