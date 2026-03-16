@@ -35,17 +35,14 @@ class MinecraftCNN(nn.Module):
             conv_height = (conv_height - kernel_size) // CONV_STRIDE + 1
             current_channels = num_kernels
 
-        # reduce dimensions to most important features, reducing computational cost
-        # output width = (input_width - kernel_size) / stride + 1
-        # output height = (input_height - kernel_size) / stride + 1
-        # (for 1 conv layer) calculate width: (318 - 2) / 2 + 1 = 159
-        # (for 1 conv layer) calculate height: (178 - 2) / 2 + 1 = 89
-        layers.append(nn.MaxPool2d(kernel_size=POOL_KERNEL_SIZE, stride=POOL_STRIDE))
-        layers.append(nn.MaxPool2d(kernel_size=POOL_KERNEL_SIZE, stride=POOL_STRIDE))
-        pool_width  = (conv_width  - POOL_KERNEL_SIZE) // POOL_STRIDE + 1
-        pool_width  = (pool_width  - POOL_KERNEL_SIZE) // POOL_STRIDE + 1
-        pool_height = (conv_height - POOL_KERNEL_SIZE) // POOL_STRIDE + 1
-        pool_height = (pool_height - POOL_KERNEL_SIZE) // POOL_STRIDE + 1
+            # reduce dimensions to most important features, reducing computational cost
+            # output width = (input_width - kernel_size) / stride + 1
+            # output height = (input_height - kernel_size) / stride + 1
+            # (for 1 conv layer) calculate width: (318 - 2) / 2 + 1 = 159
+            # (for 1 conv layer) calculate height: (178 - 2) / 2 + 1 = 89
+            layers.append(nn.MaxPool2d(kernel_size=POOL_KERNEL_SIZE, stride=POOL_STRIDE))
+            conv_height = (conv_height - POOL_KERNEL_SIZE) // POOL_STRIDE + 1
+            conv_width = (conv_width - POOL_KERNEL_SIZE) // POOL_STRIDE + 1        
 
         # flatten the image into a vector so linear layer can determine the class scores for each image
         # (for 1 conv layer) calculation: 159x89 -> 1x14,191
@@ -54,7 +51,7 @@ class MinecraftCNN(nn.Module):
         # fully connected layer to output class scores
         # input size = num_kernels * height * width
         # (for 1 conv layer) calculation: 1 * 159 * 89 = 14,191
-        linear_input = int(current_channels * pool_width * pool_height)
+        linear_input = int(current_channels * conv_width * conv_height)
         layers.append(nn.Linear(linear_input, num_classes))
 
         # build the model
