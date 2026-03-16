@@ -44,13 +44,21 @@ class MinecraftCNN(nn.Module):
             conv_height = (conv_height - POOL_KERNEL_SIZE) // POOL_STRIDE + 1
             conv_width = (conv_width - POOL_KERNEL_SIZE) // POOL_STRIDE + 1        
 
+        # additonal pool layer (originally to reduce dimensions and computational cost)
+        # but turns out that model performs better (higher accuracy) with additional pool layer
+        # (for 1 conv layer) calculate width: (159 - 2) / 2 + 1 = 79
+        # (for 1 conv layer) calculate height: (89 - 2) / 2 + 1 = 44
+        layers.append(nn.MaxPool2d(kernel_size=POOL_KERNEL_SIZE, stride=POOL_STRIDE))
+        conv_height = (conv_height - POOL_KERNEL_SIZE) // POOL_STRIDE + 1
+        conv_width = (conv_width - POOL_KERNEL_SIZE) // POOL_STRIDE + 1 
+
         # flatten the image into a vector so linear layer can determine the class scores for each image
-        # (for 1 conv layer) calculation: 159x89 -> 1x14,191
+        # # (for 1 conv layer) calculation: 79x44 -> 1x3,476
         layers.append(nn.Flatten())
 
         # fully connected layer to output class scores
         # input size = num_kernels * height * width
-        # (for 1 conv layer) calculation: 1 * 159 * 89 = 14,191
+        # (for 1 conv layer) calculation: 1 * 79 * 44 = 3,476
         linear_input = int(current_channels * conv_width * conv_height)
         layers.append(nn.Linear(linear_input, num_classes))
 

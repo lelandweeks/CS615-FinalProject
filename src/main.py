@@ -103,7 +103,7 @@ def main():
                                       kernel_size=kernel_size,
                                       num_conv_layers=layers)
         minecraft_model = minecraft_model.to(device) # use GPU if available
-        model_from_disk = torch.load(f"models/{model_filename}", weights_only=False)
+        model_from_disk = torch.load(f"models/{model_filename}", weights_only=False, map_location=device)
         minecraft_model.load_state_dict(model_from_disk['model'])
         evaluate_model = evaluate.EvaluateModel(minecraft_model, test_loader, device)
         accuracy, cm = evaluate_model.evaluate()
