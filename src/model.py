@@ -39,7 +39,7 @@ class MinecraftCNN(nn.Module):
             # output width = (input_width - kernel_size) / stride + 1
             # output height = (input_height - kernel_size) / stride + 1
             # (for 1 conv layer) calculate width: (318 - 2) / 2 + 1 = 159
-            # (for 1 conv layer) calculate height: (178 - 2) / 2 + 1 = 89
+            # (for 1 conv layer) calculate height: (178 - 2) / 2 + 1 = 89 
             layers.append(nn.MaxPool2d(kernel_size=POOL_KERNEL_SIZE, stride=POOL_STRIDE))
             conv_height = (conv_height - POOL_KERNEL_SIZE) // POOL_STRIDE + 1
             conv_width = (conv_width - POOL_KERNEL_SIZE) // POOL_STRIDE + 1        
