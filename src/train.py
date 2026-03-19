@@ -9,7 +9,7 @@ class TrainModel:
         self.train_loader = train_loader
         self.device = device
 
-    def train(self, num_epochs=10, learning_rate=0.01):
+    def train(self, num_epochs=50, learning_rate=0.01):
 
         train_losses = []
 

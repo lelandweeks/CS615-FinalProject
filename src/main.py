@@ -26,7 +26,7 @@ BASE MODEL: Color images with 1 3x3 kernel and 1 convolutional layer
     COMMAND LINE: python main.py --mode [train | evaluate] --grayscale
  
 MULTIPLE KERNELS MODEL: Same as base with multiple kernels
-    PARAMETERS: in_channels=3, num_kernels=3, kernel_size=3, num_conv_layers=1
+    PARAMETERS: in_channels=3, num_kernels=32, kernel_size=3, num_conv_layers=1
     FILE NAME: model_color_3k_3x3_1l.pt
     COMMAND LINE: python main.py --mode [train | evaluate] --kernels 3
  

@@ -23,10 +23,10 @@ https://colab.research.google.com/drive/1NlGioW1rDLuqBWLtrcxHjDnmxogNDY29?usp=sh
 `python3 src/main.py --mode evaluate`
 
 **Recreate our best model:** \
-`python3 src/main.py --mode evaluate --kernels 32 --kernel-size 3 --layers 1 --epochs 200 --lr 0.001`
+`python3 src/main.py --mode train --kernels 32 --kernel_size 3 --layers 1 --epochs 200 --lr 0.001`
 
 **Evaluate our best model:** \
-`python3 src/main.py --mode evaluate --kernels 32 --kernel-size 3 --layers 1`
+`python3 src/main.py --mode evaluate --kernels 32 --kernel_size 3 --layers 1`
 
 The `--kernels`, `--kernel_size`, and `--layers` flags determine which saved model file is loaded. Use the same values for training and evaluation.
 
