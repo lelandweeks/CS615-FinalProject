@@ -53,12 +53,12 @@ class MinecraftCNN(nn.Module):
         conv_width = (conv_width - POOL_KERNEL_SIZE) // POOL_STRIDE + 1 
 
         # flatten the image into a vector so linear layer can determine the class scores for each image
-        # # (for 1 conv layer) calculation: 79x44 -> 1x3,476
+        # (for 1 conv layer) calculation: 79x44x32 -> 1x111,232
         layers.append(nn.Flatten())
 
         # fully connected layer to output class scores
         # input size = num_kernels * height * width
-        # (for 1 conv layer) calculation: 1 * 79 * 44 = 3,476
+        # # (for 1 conv layer) calculation: 32 * 79 * 44 = 111,232  
         linear_input = int(current_channels * conv_width * conv_height)
         layers.append(nn.Linear(linear_input, num_classes))
 
